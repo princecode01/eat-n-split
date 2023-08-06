@@ -28,28 +28,21 @@ const initialFriends = [
 export default function App() {
   const [friends, setFriends] = useState(initialFriends);
   const [showAddFriend, setShowAddFriend] = useState(false);
-  const [showSplitBill, setShowSplitBill] = useState(false);
-  const [selectedFriend, setSelectedFriend] = useState({});
+  const [selectedFriend, setSelectedFriend] = useState(null);
   const [friend, setFriend] = useState({
     id: null,
     name: "",
     imageUrl: "https://i.pravatar.cc/48",
     balance: 0,
   });
-  const [splitObj, setSplitObj] = useState({
-    friend: "",
-    billValue: "",
-    userExpense: "",
-    friendExpense: "",
-    whoSpent: "user",
-  });
+
   const handleShowAddFriend = () => {
     setShowAddFriend((show) => !show);
-    setShowSplitBill(false);
+    setSelectedFriend(null)
   };
-  const handleShowSplitBill = () => {
-    setShowSplitBill((show) => !show);
-    setShowAddFriend(false)
+  const handleShowSplitBill = (selected) => {
+    setSelectedFriend((cur) => (cur?.id === selected.id ? null : selected));
+    setShowAddFriend(false);
   };
   return (
     <div className="app">
@@ -57,10 +50,7 @@ export default function App() {
         <FriendList
           friends={friends}
           handleShowSplitBill={handleShowSplitBill}
-          setSplitObj={setSplitObj}
-          splitObj={splitObj}
           selectedFriend={selectedFriend}
-          setSelectedFriend={setSelectedFriend}
         />
         {showAddFriend && (
           <FormAddFriend
@@ -73,14 +63,12 @@ export default function App() {
           {showAddFriend ? "Close" : "Add friend"}
         </Button>
       </div>
-      {showSplitBill && (
+      {selectedFriend && (
         <FormSplitBill
-          splitObj={splitObj}
-          setSplitObj={setSplitObj}
           friends={friends}
           setFriends={setFriends}
-          setShowSplitBill={setShowSplitBill}
-          setSelectedFriend={setSelectedFriend}
+          selectedFriend={selectedFriend}
+          key={selectedFriend.id}
         />
       )}
     </div>

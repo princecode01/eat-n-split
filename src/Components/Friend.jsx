@@ -3,12 +3,9 @@ import Button from "./Button";
 export default function Friend({
   friend,
   handleShowSplitBill,
-  setSplitObj,
-  splitObj,
   selectedFriend,
-  setSelectedFriend,
 }) {
-  const isSelected = selectedFriend.id === friend.id;
+  const isSelected = selectedFriend?.id === friend.id;
   return (
     <li className={isSelected ? "selected" : ""}>
       <img src={friend.imageUrl} alt={friend.name} />
@@ -27,11 +24,7 @@ export default function Friend({
 
       <Button
         onClick={() => {
-          handleShowSplitBill();
-          setSplitObj({ ...splitObj, friend: friend.name });
-          setSelectedFriend((selected) =>
-            selected.id === friend.id ? {} : friend
-          );
+          handleShowSplitBill(friend);
         }}
       >
         {isSelected ? "close" : "select"}
